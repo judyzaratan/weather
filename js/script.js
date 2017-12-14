@@ -1,6 +1,11 @@
+function convertTemp(celcius){
+  var farhenheit = (celcius * (9/5)) + 32;
+  return farhenheit;
+}
+
+
 $(document).ready(function(){
-  var x = document.getElementById("demo");
-  var y = document.getElementById("test");
+  var x = document.getElementById("content");
   function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition);
@@ -20,7 +25,7 @@ $(document).ready(function(){
       },
       success: function(response){
         console.log(response);
-        y.innerHTML = response.main.temp + response.name;
+        x.innerHTML = response.main.temp + response.name + convertTemp(response.main.temp);
       }
     });
   }
