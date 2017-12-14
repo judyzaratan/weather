@@ -20,6 +20,7 @@ function temperature() {
     $tempUnit.html(tempUnit);
     $city.html(city);
     $tempUnit.html('C');
+    $pic.html('<img src="' + pic +  '" alt="">');
   }
 
   function toFahrenheit(temp) {
@@ -81,6 +82,5 @@ $(document).ready(function(){
   var getLocationTemp = temperature();
   getLocationTemp.getLocation();
   $('#tempUnit').click(getLocationTemp.convertTemp);
-;
 
 });

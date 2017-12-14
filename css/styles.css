@@ -1,8 +1,18 @@
 body {
-  background-color: black;
+  background-color: #21618C;
   color: white;
 }
+
+h1 {
+  font-size: 5em;
+}
 #content {
+  font-size: 2em;
   color: white;
   height: 50em;
+}
+
+.vertical-align {
+    display: flex;
+    align-items: center;
 }
