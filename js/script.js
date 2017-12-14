@@ -5,7 +5,7 @@ function temperature() {
   var $pic = $("#pic");
   var $tempUnit = $('#tempUnit');
   var celcius = 0;
-  var fahrenheit = 0;
+  var farhenheit = 0;
   var latitude = 0;
   var longitude = 0;
   var temp = 0;
@@ -15,7 +15,7 @@ function temperature() {
   var pic = "";
 
   function displayTemp(){
-    $temp.html(temp.toString() + '&deg;');
+    $temp.html(celcius.toString() + '&deg;');
     $desc.html(desc);
     $tempUnit.html(tempUnit);
     $city.html(city);
@@ -37,8 +37,7 @@ function temperature() {
       },
       success: function(response){
         console.log(response);
-        temp = response.main.temp;
-        celcius = parseInt(response.main.temp);
+        celcius = parseFloat(response.main.temp);
         farhenheit = toFahrenheit(celcius);
         city = response.name;
         desc = response.weather[0].main;
@@ -66,6 +65,7 @@ function temperature() {
     },
     convertTemp: function(){
       var tempUnit = $tempUnit.html();
+      console.log(celcius, farhenheit);
       if (tempUnit === 'C') {
         $("#temp").html(farhenheit.toPrecision(4).toString() + '&deg;');
         $tempUnit.html('F');
