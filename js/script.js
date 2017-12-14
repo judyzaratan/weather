@@ -3,32 +3,46 @@ function convertTemp(celcius){
   return farhenheit;
 }
 
-
-$(document).ready(function(){
-  var x = document.getElementById("content");
-  function getLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-      x.innerHTML = "Geolocation is not supported"
-    }
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    x.innerHTML = "Geolocation is not supported"
   }
+}
+function changeTempUnit() {
+  var $tempUnit = $('#tempUnit');
+  $tempUnit.html('C');
+  $tempUnit.html('F');
+}
+function showPosition(position) {
+  var $temp = $("#temp");
+  var $city = $("#city");
+  var $desc = $("#desc");
+  var $pic = $("#pic");
+  var $tempUnit = $('#tempUnit');
 
-  function showPosition(position) {
-    x.innerHTML = "Latitude:" + position.coords.latitude + "<br> Longitude: " + position.coords.longitude;
-    $.ajax({
-      url: 'https://fcc-weather-api.glitch.me/api/current',
-      type: 'GET',
-      data: {
-        lat: position.coords.latitude,
-        lon: position.coords.longitude
-      },
-      success: function(response){
-        console.log(response);
-        x.innerHTML = response.main.temp + response.name + convertTemp(response.main.temp);
+
+  $.ajax({
+    url: 'https://fcc-weather-api.glitch.me/api/current',
+    type: 'GET',
+    data: {
+      lat: position.coords.latitude,
+      lon: position.coords.longitude
+    },
+    success: function(response){
+      console.log(response);
+      $temp.html(response.main.temp);
+      $city.html(response.name);
+      $desc.html(response.weather[0].main);
+      var pic = response.weather[0].icon || null;
+      if (pic) {
+        $pic.html("<img src = '" + pic + "' " + "alt='"
+                  + response.weather[0].description + "'>")
       }
-    });
-  }
+    }
+  });
+}
+$(document).ready(function(){
   getLocation();
-
 });

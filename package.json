@@ -1,0 +1,23 @@
+{
+  "name": "weatherapp",
+  "version": "1.0.0",
+  "description": "A web application that displays the weather using the user's locale.   A button is displayed to allow user to toggle between Fahrenheit and Celsius. Dependent on the weather, an corresponding weather icon is displayed (ie rotating sun on a sunny, warm day).",
+  "main": "index.js",
+  "dependencies": {
+    "normalize.css": "^7.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/judyzaratan/weather.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/judyzaratan/weather/issues"
+  },
+  "homepage": "https://github.com/judyzaratan/weather#readme"
+}
