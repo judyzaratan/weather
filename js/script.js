@@ -1,65 +1,86 @@
-function convertTemp(temp){
-  var $tempUnit = $('#tempUnit');
-  var updateValue = $tempUnit.html();
-  if (updateValue === 'C') {
-    var farhenheit = (temp * (9/5)) + 32;
-    $("#temp").html(farhenheit.toPrecision(4).toString());
-    $tempUnit.html('F');
-  } else {
-    var celcius = (temp - 32) * (5/9);
-    $("#temp").html(celcius.toPrecision(4).toString());
-    $tempUnit.html('C');
-
-  }
-}
-
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  } else {
-    x.innerHTML = "Geolocation is not supported"
-  }
-}
-function changeTempUnit() {
-  var $tempUnit = $('#tempUnit');
-  var updateValue = $tempUnit.html() === 'C' ? 'F': 'C';
-  $tempUnit.html(updateValue);
-}
-function showPosition(position) {
+function temperature() {
   var $temp = $("#temp");
   var $city = $("#city");
   var $desc = $("#desc");
   var $pic = $("#pic");
   var $tempUnit = $('#tempUnit');
+  var celcius = 0;
+  var fahrenheit = 0;
+  var latitude = 0;
+  var longitude = 0;
+  var temp = 0;
+  var city = "";
+  var desc = "";
+  var tempUnit = "";
+  var pic = "";
 
+  function displayTemp(){
+    $temp.html(temp.toString() + '&deg;');
+    $desc.html(desc);
+    $tempUnit.html(tempUnit);
+    $city.html(city);
+    $tempUnit.html('C');
+  }
 
-  $.ajax({
-    url: 'https://fcc-weather-api.glitch.me/api/current',
-    type: 'GET',
-    data: {
-      lat: position.coords.latitude,
-      lon: position.coords.longitude
+  function toFahrenheit(temp) {
+    return (temp * (9/5)) + 32;
+  }
+
+  function getTemp(){
+    $.ajax({
+      url: 'https://fcc-weather-api.glitch.me/api/current',
+      type: 'GET',
+      data: {
+        lat: latitude,
+        lon: longitude
+      },
+      success: function(response){
+        console.log(response);
+        temp = response.main.temp;
+        celcius = parseInt(response.main.temp);
+        farhenheit = toFahrenheit(celcius);
+        city = response.name;
+        desc = response.weather[0].main;
+        pic = response.weather[0].icon || null;
+        displayTemp();
+      }
+    });
+  }
+
+  return {
+    getLocation: function(position) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition( function(position){
+          latitude = position.coords.latitude;
+          longitude = position.coords.longitude;
+          getTemp();
+        });
+      }
     },
-    success: function(response){
-      console.log(response);
-      $temp.html(response.main.temp);
-      $city.html(response.name);
-      $desc.html(response.weather[0].main);
-      $tempUnit.html('C');
-      var pic = response.weather[0].icon || null;
-      if (pic) {
-        $pic.html("<img src = '" + pic + "' " + "alt='"
-                  + response.weather[0].description + "'>")
+
+    changeTempUnit: function(){
+      var $tempUnit = $('#tempUnit');
+      var updateValue = $tempUnit.html() === 'C' ? 'F': 'C';
+      $tempUnit.html(updateValue);
+    },
+    convertTemp: function(){
+      var tempUnit = $tempUnit.html();
+      if (tempUnit === 'C') {
+        $("#temp").html(farhenheit.toPrecision(4).toString() + '&deg;');
+        $tempUnit.html('F');
+      } else {
+        $("#temp").html(celcius.toString() + '&deg;');
+        $tempUnit.html('C');
+
       }
     }
-  });
+  };
 }
-$(document).ready(function(){
-  getLocation();
-  $("#tempUnit").click(function() {
-    var temp = parseInt($('#temp').html());
-    convertTemp(temp);
 
-  });
+$(document).ready(function(){
+  var getLocationTemp = temperature();
+  getLocationTemp.getLocation();
+  $('#tempUnit').click(getLocationTemp.convertTemp);
+;
 
 });
